@@ -1,13 +1,45 @@
 //-- Google Maps API Key
 var APIkey = "AIzaSyBb0CDUuXsKE2EwQDS79oQZXtUoAA77HXc";
 
- Weather
-function populateCityWeather(city, citySearchList) {
-    createCityList(citySearchList);
+//What we need in the html:
+
+// get location data from user
+if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(posit=>{
+      var lat = posit.coords.latitude;
+      var lng = posit.coords.longitude;
+      // do stuff with location
+    }, error=>{
+      alert('Could not get geolocation');
+    });
+  }
+
+// current location on map
+function showPosition(position) {
+    var latlon = position.coords.latitude + "," + position.coords.longitude;
+  
+    var img_url = "https://maps.googleapis.com/maps/api/staticmap?center="+latlon+"&zoom=14&size=400x300&sensor=false&key=AIzaSyBb0CDUuXsKE2EwQDS79oQZXtUoAA77HXc";
+  
+    document.getElementById("mapholder").innerHTML = "<img src='"+img_url+"'>";
+
+    console.log(latlon);
+};
+// look up weather for location
+
+
+// then populate each id with data from api
+
+//city-name
+//current_temp
+//current_condition
+
+function populateCityWeather() {
+    //user browser location to get longitutde and lattidude
   
     // Current weather
+    
     let queryURL =
-   "https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude={part}&appid=33076c7235c2a39d07b0fde1994a80b1";
+   "https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude={part}&apikey=&appid=33076c7235c2a39d07b0fde1994a80b1"
 
   
     let latitude;
@@ -42,13 +74,14 @@ function populateCityWeather(city, citySearchList) {
           "src",
           "https://openweathermap.org/img/w/" + weather.weather[0].icon + ".png"
         );
-        $("#current-icon").empty();
-        $("#current-icon").append(weatherIcon);
+        $("#current-condition").empty();
+        $("#current-condition").append(weatherIcon);
   
         $("#current-temp").text("Temperature: " + weather.main.temp + " °F");
-        $("#current-humidity").text("Humidity: " + weather.main.humidity + "%");
-        $("#current-wind").text("Wind Speed: " + weather.wind.speed + " MPH");
+        
   
         latitude = weather.coord.lat;
         longitude = weather.coord.lon;
  })
+
+populateCityWeather()
